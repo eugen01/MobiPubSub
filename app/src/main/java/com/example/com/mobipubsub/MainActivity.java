@@ -1,7 +1,6 @@
 package com.example.com.mobipubsub;
 
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -9,24 +8,8 @@ import android.view.MenuItem;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.os.AsyncTask;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
-
-import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -45,7 +28,7 @@ public class MainActivity extends ActionBarActivity {
             new GcmRegistrationAsyncTask(this).execute();
         }
         else {
-            Log.i(TAG, "No valid Google Play Services APK found.");
+            Log.i("debug", "No valid Google Play Services APK found.");
         }
 
 
@@ -92,7 +75,7 @@ public class MainActivity extends ActionBarActivity {
                 GooglePlayServicesUtil.getErrorDialog(resultCode, this,
                         PLAY_SERVICES_RESOLUTION_REQUEST).show();
             } else {
-                Log.i(TAG, "This device is not supported.");
+                Log.i("debug", "This device is not supported.");
                 finish();
             }
             return false;
