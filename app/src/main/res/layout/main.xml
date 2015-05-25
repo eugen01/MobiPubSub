@@ -21,11 +21,43 @@
     <LinearLayout android:layout_width="fill_parent"
                   android:layout_height="fill_parent"
                   android:orientation="vertical">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/publisher"
+            android:textAllCaps="true"
+            android:textAlignment="center"
+            android:layout_marginLeft="50dp"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:paddingBottom="25dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner"
+                android:layout_weight="1"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Message"
+                android:id="@+id/message_edit"/>
+        </LinearLayout>
+
+
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                >
+            android:layout_marginLeft="20dp">
+
 
             <Button
                 android:id="@+id/send"
@@ -43,10 +75,47 @@
 
         </LinearLayout>
 
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/subscriber"
+            android:textAllCaps="true"
+            android:textAlignment="center"
+            android:layout_marginLeft="50dp"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:paddingBottom="25dp"
+            android:paddingTop="25dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner2"
+                android:layout_weight="1"
+                />
+
+            <Button
+                android:id="@+id/subscribe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onClick"
+                android:text="@string/subscribe" />
+
+        </LinearLayout>
+
+
         <TextView
                 android:id="@+id/display"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"/>
+
+
 
     </LinearLayout>
 

@@ -19,7 +19,18 @@
     <string name="app_name">MobiPubSub</string>
     <string name="send">Send</string>
     <string name="clear">Clear</string>
+    <string name="subscribe">Subscribe</string>
     <string name="action_settings">Action Settings</string>
     <string name="hello_world">Hello World!</string>
+    <string name="publisher">Publisher</string>
+    <string name="subscriber">Subscriber</string>
+
+    <string-array name="topics_array">
+        <item>Topic 1</item>
+        <item>Topic 2</item>
+        <item>Topic 3</item>
+        <item>Topic 4</item>
+    </string-array>
+
 
 </resources>
