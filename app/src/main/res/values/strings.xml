@@ -22,10 +22,8 @@
     <string name="subscribe">Subscribe</string>
     <string name="action_settings">Action Settings</string>
     <string name="hello_world">Hello World!</string>
-<<<<<<< HEAD
     <string name="title_activity_main_activity2">MainActivity2</string>
     <string name="title_activity_profile">Profile</string>
-=======
     <string name="publisher">Publisher</string>
     <string name="subscriber">Subscriber</string>
 
