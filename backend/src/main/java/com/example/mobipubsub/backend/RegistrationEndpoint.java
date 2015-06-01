@@ -10,13 +10,12 @@ import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
-import com.google.apphosting.api.ApiProxy;
+import com.google.appengine.labs.repackaged.org.json.JSONArray;
+import com.google.appengine.labs.repackaged.org.json.JSONException;
+import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,21 +44,18 @@ public class RegistrationEndpoint {
      * @param regId The Google Cloud Messaging registration Id to add
      */
     @ApiMethod(name = "register")
-    public void registerDevice(@Named("regId") String regId, @Named("catStringPref") String catStringPref) {
-        if (findRecord(regId) != null) {
-            log.info("Device " + regId + " already registered, skipping register");
+    public void registerDevice(@Named("regId") String regId, @Named("catStringPref") String catStringPref) throws JSONException {
 
-            MessagingEndpoint test = new MessagingEndpoint();
-            try {
-                test.sendMessage("test");
-            } catch (IOException e) {
-                e.printStackTrace();
-                log.log(Level.ALL, "test");
-            }
+        RegistrationRecord record = findRecord(regId);
+        if (record != null) {
 
+            record.setCatPrefArray(catStringPref);
+            ofy().save().entity(record).now();
             return;
         }
-        RegistrationRecord record = new RegistrationRecord();
+        record = new RegistrationRecord();
+
+        record.setCatPrefArray(catStringPref);
         record.setRegId(regId);
         ofy().save().entity(record).now();
     }
@@ -93,6 +89,17 @@ public class RegistrationEndpoint {
 
     private RegistrationRecord findRecord(String regId) {
         return ofy().load().type(RegistrationRecord.class).filter("regId", regId).first().now();
+    }
+
+    @ApiMethod(name = "postNews")
+    public void postNews(@Named("newsContent") String newsContent, @Named("categories") String categories) {
+            MessagingEndpoint msgSender = new MessagingEndpoint();
+            try {
+                msgSender.sendMessage(newsContent, categories);
+            } catch (IOException e) {
+                e.printStackTrace();
+                log.log(Level.ALL, "Faild to post news.");
+            }
     }
 
 }

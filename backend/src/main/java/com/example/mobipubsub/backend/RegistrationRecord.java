@@ -15,16 +15,29 @@ public class RegistrationRecord {
 
     @Index
     private String regId;
+    private String catPrefArray;
     // you can add more fields...
 
     public RegistrationRecord() {
     }
 
     public String getRegId() {
+
         return regId;
     }
 
     public void setRegId(String regId) {
+
         this.regId = regId;
     }
+
+    public String getCatPrefArray() {
+
+        return this.catPrefArray;
+    }
+
+    public void setCatPrefArray(String catPrefArray) {
+        this.catPrefArray = catPrefArray;
+    }
+
 }

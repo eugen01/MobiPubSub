@@ -8,14 +8,19 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
+    public ArrayList<String> list = new ArrayList<String>();
 
-    public final static String CAT_PREF_KEY = "com.example.myapp.PREFERENCE_FILE_KEY";
+    public ArrayAdapter<String> adapter = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -23,12 +28,22 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+        new GcmRegistrationAsyncTask(this).execute();
 
-        SharedPreferences categoryPref = this.getSharedPreferences(CAT_PREF_KEY, Context.MODE_PRIVATE);
-        Set<String> catStringPref = categoryPref.getStringSet(CAT_PREF_KEY, new HashSet<String>());
+    }
 
-        new GcmRegistrationAsyncTask(this, catStringPref).execute();
+    @Override
+    public void onResume() {
+        super.onResume();
 
+        list = new ArrayList<String>(SavedNews.getSavedNews(this));
+
+        final ListView prefList = (ListView)this.findViewById(R.id.news_list);
+
+        adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, android.R.id.text1, list);
+
+        prefList.setAdapter(adapter);
     }
 
     @Override
@@ -52,6 +67,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void postNews(View view) {
+        TextView msg_content = (TextView)this.findViewById(R.id.msg_content);
+        TextView categories = (TextView)this.findViewById(R.id.categories);
+        new SendNewsAsync(this, msg_content.getText().toString(), categories.getText().toString()).execute();
+    }
+
+    public void refresh(View view) {
+        list.clear();
+        list.addAll(SavedNews.getSavedNews(this));
+        adapter.notifyDataSetChanged();
     }
 
 }

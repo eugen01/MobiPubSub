@@ -25,13 +25,11 @@ class GcmRegistrationAsyncTask extends AsyncTask<Void, Void, String> {
     private static Registration regService = null;
     private GoogleCloudMessaging gcm;
     private Context context;
-    private Set<String> catStringPref = null;
 
     private static final String SENDER_ID = "23378659771";
 
-    public GcmRegistrationAsyncTask(Context context, Set<String> catStringPref) {
+    public GcmRegistrationAsyncTask(Context context) {
         this.context = context;
-        this.catStringPref = catStringPref;
     }
 
     @Override
@@ -54,11 +52,15 @@ class GcmRegistrationAsyncTask extends AsyncTask<Void, Void, String> {
                 gcm = GoogleCloudMessaging.getInstance(context);
             }
             String regId = gcm.register(SENDER_ID);
-            msg = "Device registered, registration ID=" + regId;
+            msg = "Device registered";
+
+            Set<String> catStringPref = CategoryPreference.getCategoryPreference(context);
 
             List <String> catStringPrefList = new ArrayList<String>(catStringPref);
+
             JSONArray mJSONArray = new JSONArray(catStringPrefList);
             regService.register(regId, mJSONArray.toString()).execute();
+
         } catch (IOException ex) {
             ex.printStackTrace();
             msg = "Error: " + ex.getMessage();
@@ -68,7 +70,7 @@ class GcmRegistrationAsyncTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPostExecute(String msg) {
-        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
         Logger.getLogger("REGISTRATION").log(Level.INFO, msg);
     }
 }

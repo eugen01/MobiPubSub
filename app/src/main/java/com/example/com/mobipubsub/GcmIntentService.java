@@ -15,6 +15,8 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.Set;
+
 /**
  * This {@code IntentService} does the actual handling of the GCM message.
  * {@code GcmBroadcastReceiver} (a {@code WakefulBroadcastReceiver}) holds a
@@ -53,7 +55,12 @@ public class GcmIntentService extends IntentService {
                 // If it's a regular GCM message, do some work.
             }
             else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
-                showToast(extras.getString("message"));
+                sendNotification(extras.getString("message"));
+
+                Set<String> newsList = SavedNews.getSavedNews(this);
+                newsList.add(extras.getString("message"));
+                Log.d("test", newsList.toString());
+                SavedNews.setSavedNews(this, newsList);
             }
         }
         // Release the wake lock provided by the WakefulBroadcastReceiver.
@@ -73,7 +80,7 @@ public class GcmIntentService extends IntentService {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_stat_gcm)
-                        .setContentTitle("GCM Notification")
+                        .setContentTitle("MobiPubSub")
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(msg))
                         .setContentText(msg);

@@ -15,6 +15,7 @@ import com.google.api.server.spi.config.ApiNamespace;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.inject.Named;
@@ -45,11 +46,16 @@ public class MessagingEndpoint {
      *
      * @param message The message to send
      */
-    public void sendMessage(@Named("message") String message) throws IOException {
+    public void sendMessage(@Named("message") String message, @Named("categories") String categories) throws IOException {
         if (message == null || message.trim().length() == 0) {
             log.warning("Not sending message because it is empty");
             return;
         }
+
+        String[] categoryArray = categories.split(" ");
+
+
+
         // crop longer messages
         if (message.length() > 1000) {
             message = message.substring(0, 1000) + "[...]";
@@ -57,8 +63,32 @@ public class MessagingEndpoint {
         Sender sender = new Sender(API_KEY);
         Message msg = new Message.Builder().addData("message", message).build();
         List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).limit(10).list();
+
         for (RegistrationRecord record : records) {
+
+
+            Boolean send = false;
+            log.log(Level.WARNING, record.getCatPrefArray());
+
+            for (String category: categoryArray) {
+
+                log.log(Level.WARNING, category);
+
+                if (record.getCatPrefArray().contains(category)) {
+                    send = true;
+                    break;
+                }
+            }
+
+            log.log(Level.WARNING, send.toString());
+
+            if (!send) {
+                continue;
+            }
+
+            //Test categories
             Result result = sender.send(msg, record.getRegId(), 5);
+
             if (result.getMessageId() != null) {
                 log.info("Message sent to " + record.getRegId());
                 String canonicalRegId = result.getCanonicalRegistrationId();
