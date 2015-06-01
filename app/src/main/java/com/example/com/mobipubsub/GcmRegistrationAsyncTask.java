@@ -23,7 +23,6 @@ class GcmRegistrationAsyncTask extends AsyncTask<Void, Void, String> {
     private GoogleCloudMessaging gcm;
     private Context context;
 
-    // TODO: change to your own sender ID to Google Developers Console project number, as per instructions above
     private static final String SENDER_ID = "23378659771";
 
     public GcmRegistrationAsyncTask(Context context) {
@@ -33,21 +32,13 @@ class GcmRegistrationAsyncTask extends AsyncTask<Void, Void, String> {
     @Override
     protected String doInBackground(Void... params) {
         if (regService == null) {
-//            Registration.Builder builder = new Registration.Builder(AndroidHttp.newCompatibleTransport(),
-//                    new AndroidJsonFactory(), null)
-//                    // Need setRootUrl and setGoogleClientRequestInitializer only for local testing,
-//                    // otherwise they can be skipped
-//                    .setRootUrl("http://10.0.2.2:8080/_ah/api/")
-//                    .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
-//                        @Override
-//                        public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest)
-//                                throws IOException {
-//                            abstractGoogleClientRequest.setDisableGZipContent(true);
-//                        }
-//                    });
-            // end of optional local run code
-            Registration.Builder builder = new Registration.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
-                    .setRootUrl("https://bold-column-95517.appspot.com/_ah/api/");
+
+            Registration.Builder builder = new Registration.Builder(
+                    AndroidHttp.newCompatibleTransport(),
+                    new AndroidJsonFactory(),
+                    null
+            )
+            .setRootUrl("https://bold-column-95517.appspot.com/_ah/api/");
 
             regService = builder.build();
         }
@@ -60,12 +51,7 @@ class GcmRegistrationAsyncTask extends AsyncTask<Void, Void, String> {
             String regId = gcm.register(SENDER_ID);
             msg = "Device registered, registration ID=" + regId;
 
-            // You should send the registration ID to your server over HTTP,
-            // so it can use GCM/HTTP or CCS to send messages to your app.
-            // The request to your server should be authenticated if your app
-            // is using accounts.
             regService.register(regId).execute();
-
         } catch (IOException ex) {
             ex.printStackTrace();
             msg = "Error: " + ex.getMessage();

@@ -10,8 +10,11 @@ import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
+import com.google.apphosting.api.ApiProxy;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.inject.Named;
@@ -47,6 +50,14 @@ public class RegistrationEndpoint {
         RegistrationRecord record = new RegistrationRecord();
         record.setRegId(regId);
         ofy().save().entity(record).now();
+
+        MessagingEndpoint test = new MessagingEndpoint();
+        try {
+            test.sendMessage("test");
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.log(Level.ALL, "test");
+        }
     }
 
     /**
