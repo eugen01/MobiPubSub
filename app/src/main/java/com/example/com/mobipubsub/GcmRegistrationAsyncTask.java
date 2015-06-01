@@ -8,8 +8,8 @@ import com.example.mobipubsub.backend.registration.Registration;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
-import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
+
+import org.json.JSONArray;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,8 +57,8 @@ class GcmRegistrationAsyncTask extends AsyncTask<Void, Void, String> {
             msg = "Device registered, registration ID=" + regId;
 
             List <String> catStringPrefList = new ArrayList<String>(catStringPref);
-
-            regService.register(regId, new ArrayList<String>()).execute();
+            JSONArray mJSONArray = new JSONArray(catStringPrefList);
+            regService.register(regId, mJSONArray.toString()).execute();
         } catch (IOException ex) {
             ex.printStackTrace();
             msg = "Error: " + ex.getMessage();
