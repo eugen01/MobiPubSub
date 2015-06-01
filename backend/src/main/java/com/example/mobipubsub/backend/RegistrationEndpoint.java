@@ -13,7 +13,10 @@ import com.google.api.server.spi.response.CollectionResponse;
 import com.google.apphosting.api.ApiProxy;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,22 +45,23 @@ public class RegistrationEndpoint {
      * @param regId The Google Cloud Messaging registration Id to add
      */
     @ApiMethod(name = "register")
-    public void registerDevice(@Named("regId") String regId) {
+    public void registerDevice(@Named("regId") String regId, @Named("catStringPref") ArrayList<String> catStringPref) {
         if (findRecord(regId) != null) {
             log.info("Device " + regId + " already registered, skipping register");
+
+            MessagingEndpoint test = new MessagingEndpoint();
+            try {
+                test.sendMessage("test");
+            } catch (IOException e) {
+                e.printStackTrace();
+                log.log(Level.ALL, "test");
+            }
+
             return;
         }
         RegistrationRecord record = new RegistrationRecord();
         record.setRegId(regId);
         ofy().save().entity(record).now();
-
-        MessagingEndpoint test = new MessagingEndpoint();
-        try {
-            test.sendMessage("test");
-        } catch (IOException e) {
-            e.printStackTrace();
-            log.log(Level.ALL, "test");
-        }
     }
 
     /**

@@ -12,6 +12,9 @@ import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,11 +25,13 @@ class GcmRegistrationAsyncTask extends AsyncTask<Void, Void, String> {
     private static Registration regService = null;
     private GoogleCloudMessaging gcm;
     private Context context;
+    private Set<String> catStringPref = null;
 
     private static final String SENDER_ID = "23378659771";
 
-    public GcmRegistrationAsyncTask(Context context) {
+    public GcmRegistrationAsyncTask(Context context, Set<String> catStringPref) {
         this.context = context;
+        this.catStringPref = catStringPref;
     }
 
     @Override
@@ -51,7 +56,9 @@ class GcmRegistrationAsyncTask extends AsyncTask<Void, Void, String> {
             String regId = gcm.register(SENDER_ID);
             msg = "Device registered, registration ID=" + regId;
 
-            regService.register(regId).execute();
+            List <String> catStringPrefList = new ArrayList<String>(catStringPref);
+
+            regService.register(regId, new ArrayList<String>()).execute();
         } catch (IOException ex) {
             ex.printStackTrace();
             msg = "Error: " + ex.getMessage();
